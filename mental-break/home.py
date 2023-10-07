@@ -5,7 +5,9 @@ import streamlit as st
 st.title('Personalized Greeting App')
 
 # User input for name
-name = st.text_input('Enter your name')
+name = st.text_input('What is your name?')
+st.sidebar.markdown('hello')
+st.sidebar.markdown('hello2')
 
 # Displaying personalized greeting
 if name:
@@ -14,4 +16,4 @@ else:
     st.write('Enter your name above.')
 
 # Adding an image to the app
-st.image('./assets/happyhappyhappycat.gif', caption='Random Kitten', use_column_width=True)
+st.image('./assets/happyhappyhappycat.gif', caption='HAPPYHAPPYHAPPY', use_column_width=True)
