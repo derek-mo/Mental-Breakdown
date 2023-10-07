@@ -1,17 +1,41 @@
 # Importing the Streamlit library
 import streamlit as st
+import streamlit_authenticator as stauth
+
+from pymongo.mongo_client import MongoClient
 
 # Streamlit app title
-st.title('Personalized Greeting App')
+st.title('Mental Breakdown')
 
-# User input for name
-name = st.text_input('Enter your name')
 
-# Displaying personalized greeting
-if name:
-    st.write(f'Hello, {name}! Welcome to the Streamlit app.')
-else:
-    st.write('Enter your name above.')
 
-# Adding an image to the app
-st.image('./assets/happyhappyhappycat.gif', caption='Random Kitten', use_column_width=True)
+# Login
+
+# Connect to your MongoDB database
+# client = MongoClient("mongodb+srv://<username>:<password>@<cluster-url>/<dbname>?retryWrites=true&w=majority")
+# db = client['<dbname>']
+
+# # Define a collection for user data
+# users = db['users']
+
+authenticator = stauth.Authenticate(
+    dict(st.secrets['credentials']).copy(),
+    st.secrets['cookie']['name'],
+    st.secrets['cookie']['key'],
+    st.secrets['cookie']['expiry_days'],
+    st.secrets['preauthorized']
+)
+
+name, authentication_status, username = authenticator.login('Login', 'main')
+print(name, authentication_status, username)
+
+# Authenticating users
+if st.session_state["authentication_status"]:
+    authenticator.logout('Logout', 'main', key='unique_key')
+    st.write(f'Welcome *{st.session_state["name"]}*')
+    st.title('Some content')
+    print("test")
+elif st.session_state["authentication_status"] is False:
+    st.error('Username/password is incorrect')
+elif st.session_state["authentication_status"] is None:
+    st.warning('Please enter your username and password')
