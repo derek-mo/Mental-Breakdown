@@ -14,4 +14,4 @@ else:
     st.write('Enter your name above.')
 
 # Adding an image to the app
-st.image('https://placekitten.com/300/200', caption='Random Kitten', use_column_width=True)
+st.image('./assets/happyhappyhappycat.gif', caption='Random Kitten', use_column_width=True)
