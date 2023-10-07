@@ -6,8 +6,6 @@ st.title('Personalized Greeting App')
 
 # User input for name
 name = st.text_input('What is your name?')
-st.sidebar.markdown('hello')
-st.sidebar.markdown('hello2')
 
 # Displaying personalized greeting
 if name:
