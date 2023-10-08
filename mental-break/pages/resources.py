@@ -1,25 +1,37 @@
 # Importing the Streamlit library
 import streamlit as st
 from streamlit_card import card
+from streamlit_extras.app_logo import add_logo
+
+# Add the page logo
+add_logo("./assets/logo.png", 180)
 
 # Resources Page
-st.title(" :exclamation: :mending_heart: HealthyHub :mending_heart: :exclamation:")
+st.title(" :exclamation: :adhesive_bandage: :heart: HealthyHub :heart: :adhesive_bandage: :exclamation:")
 st.write("### Mental Health in the Asian Community")
-st.write("In the Asian community, mental health is a topic that is often overlooked and"
-         " ignored. Let's break down some of the obstacles in the community below!")
+st.write("###### In the Asian community, mental health is a topic that is often overlooked and"
+         " ignored. In fact, Asians are 60% less likely to receive treatment for mental health issues.")
+st.write("Let's *break down* some of the obstacles in the community below!")
 
 culture_expand = st.expander("Cultural Background and Stigmas")
 culture_expand.write("- In a lot of Asian families, there is a fear of being outcast, with family reputation and community expectations on the line.")
-culture_expand.write("- Creates a false perception of the Asian American identity as a monolith")
+culture_expand.write("- Culturally, there are a lot of traditional beliefs that mental health is taboo that"
+                     " is caused by lack of harmony or evil spirits.")
+culture_expand.write("- There is importance placed on the family unit, which are disrupted by mental health problems.")
+culture_expand.write("- A difference in upbringing by the older and younger generations create a disparity in their understanding of mental health.")
 
 mmm_expand = st.expander("The Model Minority Myth")
 mmm_expand.write("- The Model Minority Myth pressures Asians and Asian Americans to succeed, often at the cost of their mental well-being.")
-mmm_expand.write("- Creates a false perception of the Asian American identity as a monolith")
+mmm_expand.write("- Perception that the Model Minority is a positive stereotype, when it is actually damaging.")
+mmm_expand.write("- Creates a false perception of the Asian American identity as a monolith. There are many different Asian cultures, and"
+                 " placing everyone in one bucket is misleading, every background has different experiences.")
 
 
 res_expand = st.expander("Underutilizing Services")
 res_expand.write("- There is a large language barrier for mental health services. 32.6% of AAPI Americans are not fluent in English.")
-res_expand.write("- Lack of Asian therapists")
+res_expand.write("- The lack of Asian therapists and service providers make existing resources less appealing and harder to access.")
+res_expand.write("- Financial strain can be a deterrant from accessing resources, and many Asians prefer informal solutions"
+                 " to their mental health issues rather than seeking professional help.")
 
 
 st.divider()
@@ -75,7 +87,7 @@ with col2:
             title="NAAPIMHA",
             text="The National Asian American Pacific Islander Mental Health Association",
             image="data:image/jpeg;base64,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",
-            url="https://www.google.com",
+            url="https://www.naapimha.org/",
         )
     except:
         st.write()
@@ -114,5 +126,7 @@ st.divider()
 
 
 source_expand = st.expander("Sources and References")
-source_expand.write("[1] insert link")
-source_expand.write("[2] insert link")
+source_expand.write("[1] https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1071736/ ")
+source_expand.write("[2] https://www.nami.org/Your-Journey/Identity-and-Cultural-Dimensions/Asian-American-and-Pacific-Islander#:~:text=AAPIs%20have%20the%20lowest%20help,health%20care%20and%20quality%20treatment ")
+source_expand.write("[3] https://ph.ucla.edu/news/news-item/2021/may/confronting-mental-health-barriers-asian-american-and-pacific-islander   ")
+source_expand.write("[4] https://www.thechicagoschool.edu/insight/from-the-magazine/the-model-minority-myth/")
