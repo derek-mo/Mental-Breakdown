@@ -1,6 +1,8 @@
 import streamlit as st
+import pandas as pd
 from google.cloud import language_v1
 from streamlit_extras.chart_container import chart_container
+from streamlit_extras.chart_container import _get_random_data
 
 # configure the page
 st.set_page_config(
@@ -97,10 +99,6 @@ with tab3:
     st.write("### Analysis")
 
     chart_data = _get_random_data()
-
-    for i in st.session_state["entries"]:
-        chart_data.append = i[0].score
-
 
     with chart_container(chart_data):
         st.write("Here's a cool chart")
