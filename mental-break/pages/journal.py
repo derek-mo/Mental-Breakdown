@@ -1,5 +1,6 @@
 import streamlit as st
 from google.cloud import language_v1
+from streamlit_extras.chart_container import chart_container
 
 # configure the page
 st.set_page_config(
@@ -12,19 +13,21 @@ st.set_page_config(
 class Entry:
     title = ""
     content = ""
+    score = 0
 
-    def __init__(self, title, content):
+    def __init__(self, title, content, score):
         self.title = title
         self.content = content
+        self.score = score
 
 
-def analyze(entry: Entry):
+def calcScore(content : str):
     # ======== GOOGLE CLOUD NLP ========
     # Instantiates a client
     client = language_v1.LanguageServiceClient()
 
     # The text to analyze
-    text = entry.content
+    text = content
     document = language_v1.types.Document(
         content=text, type_=language_v1.types.Document.Type.PLAIN_TEXT
     )
@@ -34,8 +37,17 @@ def analyze(entry: Entry):
         request={"document": document}
     ).document_sentiment
 
+    if sentiment.score > 0.7:
+        print("Extremely Positive")
+    elif sentiment.score > 0.4:
+        print("Average")
+    elif sentiment.score > 0.2:
+        print("Poor")
     print(f"Text: {text}")
     print(f"Sentiment: {sentiment.score}")
+
+    return sentiment.score
+
 
 st.write("# Welcome to Your Journal! 👋")
 tab1, tab2 = st.tabs(["New", "History"])
@@ -58,9 +70,9 @@ with tab1:
             elif(len(content) == 0):
                 st.error("Invalid content")
             else:
-                entries.append(Entry(title, content))
+                entries.append(Entry(title, content, calcScore(content)))
                 st.success("Saved new entry.")
-                analyze(entries[0])
+                st.success(entries[0].score)
                 
 
 # contains the code for the "History" tab
