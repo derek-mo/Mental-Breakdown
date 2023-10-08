@@ -1,6 +1,10 @@
 # Importing the Streamlit library
 import streamlit as st
 from streamlit_card import card
+from streamlit_extras.app_logo import add_logo
+
+# Add the page logo
+add_logo("./assets/logo.png", 180)
 
 # Resources Page
 st.title(" :exclamation: :mending_heart: HealthyHub :mending_heart: :exclamation:")
