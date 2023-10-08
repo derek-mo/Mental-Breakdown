@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from google.cloud import language_v1
 from streamlit_extras.chart_container import chart_container
+from streamlit_extras.tags import tagger_component
 
 # configure the page
 # st.set_page_config(
@@ -36,17 +37,6 @@ def show(name, username):
         sentiment = client.analyze_sentiment(
             request={"document": document}
         ).document_sentiment
-
-        if sentiment.score > 0.6:
-            print("Extremely Positive")
-        elif sentiment.score > 0.4:
-            print("Average")
-        elif sentiment.score > 0.0:
-            print("Poor")
-        elif sentiment.score > -0.4:
-            print("bruh")
-        #print(f"Text: {text}")
-        #print(f"Sentiment: {sentiment.score}")
 
         return round(sentiment.score, 2)
 
@@ -85,6 +75,7 @@ def show(name, username):
         for i in range(len(st.session_state["entries"]) - 1, -1, -1):
             entry = st.session_state["entries"][i]
             with st.expander("**" + entry.title + "**"):
+                tagger_component("**" + entry.title + "**", [""], color_name=["green"])
                 st.write(entry.content)
                 col1, col2, NULL = st.columns([1, 1, 3])
                 with col1:
