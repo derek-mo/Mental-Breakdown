@@ -1,16 +1,18 @@
+import journal
 import streamlit as st
 import streamlit_authenticator as stauth
-import journal
-
 import yaml
 from yaml.loader import SafeLoader
-
+from streamlit_extras.app_logo import add_logo
 
 # Page configurations
 st.set_page_config(
     page_title="Mental Breakdown",
     page_icon="📘",
 )
+
+# Add the page logo
+add_logo("./assets/logo.png", 180)
 
 # Login
 def login():
@@ -38,7 +40,7 @@ def login():
 
 # Home
 def home():
-    st.title("Mental Breakdown")
+    st.title("📖 Mental Breakdown 📖")
     st.write("A journaling web application that analyzes your daily journal entries and provides feedback on ways to improve the next day.")
     login()
 

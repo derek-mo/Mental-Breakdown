@@ -1,8 +1,9 @@
 import streamlit as st
-from streamlit_extras.chart_container import chart_container
-from streamlit_extras.tags import tagger_component
 import pandas as pd
 from google.cloud import language_v1
+from streamlit_extras.chart_container import chart_container
+from streamlit_extras.tags import tagger_component
+
 from pymongo import MongoClient
 import certifi
 
@@ -18,20 +19,23 @@ def show(name, curr_user):
         username = ""
         title = ""
         content = ""
+        score = 0
+        rank = ""
+        color = ""
 
-        def __init__(self, username, title, content):
+        def __init__(self, username, title, content, score):
             self.username = username
             self.title = title
             self.content = content
+            self.score = score
 
-
-    def analyze(entry: Entry):
+    def calcScore(content : str):
         # ======== GOOGLE CLOUD NLP ========
         # Instantiates a client
         client = language_v1.LanguageServiceClient()
 
         # The text to analyze
-        text = entry.content
+        text = content
         document = language_v1.types.Document(
             content=text, type_=language_v1.types.Document.Type.PLAIN_TEXT
         )
@@ -41,13 +45,10 @@ def show(name, curr_user):
             request={"document": document}
         ).document_sentiment
 
-        print(f"Text: {text}")
-        print(f"Sentiment: {sentiment.score}")
-
-        return sentiment.score
+        return round(sentiment.score, 2)
 
     st.write(f"## Welcome {name} to Your Journal! 👋")
-    tab1, tab2 = st.tabs(["New", "History"])
+    tab1, tab2, tab3 = st.tabs(["New", "History", "Analysis"])
 
     # contains the code for the "New" tab
     with tab1:
@@ -65,7 +66,24 @@ def show(name, curr_user):
                 st.error("Invalid content")
             else:
                 # insert into db
-                new_entry = Entry(curr_user, title, content)
+                new_entry = Entry(curr_user, title, content, calcScore(content))
+
+                if new_entry.score > 0.7:
+                    new_entry.rank = "Great"
+                    new_entry.color = "green"
+                elif new_entry.score > 0.4:
+                    new_entry.rank = "Okay"
+                    new_entry.color = "bluegreen"
+                elif new_entry.score >= 0:
+                    new_entry.rank = "Neutral"
+                    new_entry.color = "yellow"
+                elif new_entry.score < -0.7:
+                    new_entry.rank = "Awful"
+                    new_entry.color = "red"
+                elif new_entry.score < -0.4:
+                    new_entry.rank = "Bad"
+                    new_entry.color = "orange"
+
                 collection.insert_one(vars(new_entry))
 
                 st.success("Saved new entry.")
@@ -80,13 +98,28 @@ def show(name, curr_user):
 
         for i, entry in enumerate(entries):
             with st.expander("**" + entry["title"] + "**"):
+                tagger_component("Day: ", [entry["rank"]], color_name=[entry["color"]])
                 st.write(entry["content"])
 
-                col1, col2, NULL = st.columns([1, 1, 3])
+                col1, col2 = st.columns([1, 1])
                 with col1:
-                    st.button("Modify", key = "modify" + str(i))
+                    # st.button("Modify", key = "modify" + str(i))
                     # TODO: Modify Button Functionality
 
                     if st.button("Delete", key = "delete" + str(i)):
                         collection.delete_one(entry)
                         st.rerun()
+
+    with tab3:
+        st.write("### Analysis")
+
+        data = {"Column 1": []}
+
+        entries = collection.find({"username": curr_user})
+        for i, entry in enumerate(entries):
+            data["Column 1"].append(entry["score"])
+
+        chart_data = pd.DataFrame(data)
+
+        with chart_container(chart_data):
+            st.area_chart(chart_data)
