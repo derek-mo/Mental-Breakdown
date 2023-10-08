@@ -26,7 +26,7 @@ def login():
     )
 
     firstname, authentication_status, username = authenticator.login('Login', 'main')
-    print(firstname, authentication_status, username)
+    #print(firstname, authentication_status, username)
 
     if authentication_status == False:
         st.error("Username/passwords is incorrect")

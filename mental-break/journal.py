@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from google.cloud import language_v1
 from streamlit_extras.chart_container import chart_container
-from streamlit_extras.chart_container import _get_random_data
 
 # configure the page
 # st.set_page_config(
@@ -38,14 +37,17 @@ def show(name, username):
             request={"document": document}
         ).document_sentiment
 
-        if sentiment.score > 0.7:
+        if sentiment.score > 0.6:
             print("Extremely Positive")
         elif sentiment.score > 0.4:
             print("Average")
-        elif sentiment.score > 0.2:
+        elif sentiment.score > 0.0:
             print("Poor")
-        print(f"Text: {text}")
-        print(f"Sentiment: {sentiment.score}")
+        elif sentiment.score > -0.4:
+            print("bruh")
+        elif sentiment.score
+        #print(f"Text: {text}")
+        #print(f"Sentiment: {sentiment.score}")
 
         return round(sentiment.score, 2)
 
@@ -75,7 +77,6 @@ def show(name, username):
                 else:
                     st.session_state["entries"].append(Entry(title, content, calcScore(content)))
                     st.success("Saved new entry.")
-                    st.success(st.session_state["entries"][len(st.session_state["entries"])- 1].score)
                     
 
     # contains the code for the "History" tab
@@ -96,16 +97,14 @@ def show(name, username):
     with tab3:
         st.write("### Analysis")
 
-        chart_data = {"Column 1": [], "Column 2": []}
+        data = {"Column 1": []}
 
         for i in range(0, len(st.session_state["entries"])):
-            chart_data["Column 1"].append(i)
-            chart_data["Column 2"].append(st.session_state["entries"][i].score)
+            data["Column 1"].append(st.session_state["entries"][i].score)
             
-        df = pd.DataFrame(chart_data)
+        chart_data = pd.DataFrame(data)
 
-        with chart_container(df):
-            st.write("Here's a cool chart")
-            st.area_chart(df)
+        with chart_container(chart_data):
+            st.area_chart(chart_data)
         
 # st.session_state 
