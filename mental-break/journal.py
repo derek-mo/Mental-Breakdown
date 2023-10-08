@@ -103,10 +103,15 @@ def show(name, curr_user):
         # Writes the data from the entries
         entries = collection.find({"username": curr_user})
 
-        for i, entry in enumerate(entries):
+        for i, entry in reversed(list(enumerate(entries))):
             with st.expander("**" + entry["title"] + "**"):
                 st.write("*" + entry["time"] + "*")
                 st.write(entry["content"])
+                if (entry["rank"] == "Great"):
+                    st.image("./assets/happyhappyhappycat.gif")
+                    music_file = open('./assets/happy.mp3', 'rb')
+                    music = music_file.read()
+                    st.audio(music)
 
                 col1, col2 = st.columns([1, 5])
                 with col1:
