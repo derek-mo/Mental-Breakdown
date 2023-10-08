@@ -1,5 +1,6 @@
 # Importing the Streamlit library
 import streamlit as st
+from google.cloud import language_v1
 
 # Streamlit app title
 st.title('Personalized Greeting App')
