@@ -114,8 +114,8 @@ def show(name, curr_user):
 
         data = {"Column 1": []}
 
-        for i in range(0, len(st.session_state["entries"])):
-            data["Column 1"].append(st.session_state["entries"][i].score)
+        for i, entry in enumerate(entries):
+            data["Column 1"].append(entry.score)
 
         chart_data = pd.DataFrame(data)
 
