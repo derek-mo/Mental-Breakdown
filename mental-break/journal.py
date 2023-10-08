@@ -73,9 +73,9 @@ def show(name, curr_user):
                     new_entry.color = "green"
                 elif new_entry.score > 0.4:
                     new_entry.rank = "Okay"
-                    new_entry.color = "lightgreen"
+                    new_entry.color = "bluegreen"
                 elif new_entry.score >= 0:
-                    new_entry.rank = "Mid"
+                    new_entry.rank = "Neutral"
                     new_entry.color = "yellow"
                 elif new_entry.score < -0.7:
                     new_entry.rank = "Awful"
@@ -101,9 +101,9 @@ def show(name, curr_user):
                 tagger_component("Day: ", [entry["rank"]], color_name=[entry["color"]])
                 st.write(entry["content"])
 
-                col1, col2, NULL = st.columns([1, 1, 3])
+                col1, col2 = st.columns([1, 1])
                 with col1:
-                    st.button("Modify", key = "modify" + str(i))
+                    # st.button("Modify", key = "modify" + str(i))
                     # TODO: Modify Button Functionality
 
                     if st.button("Delete", key = "delete" + str(i)):
