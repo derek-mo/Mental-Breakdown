@@ -45,7 +45,6 @@ def show(name, username):
             print("Poor")
         elif sentiment.score > -0.4:
             print("bruh")
-        elif sentiment.score
         #print(f"Text: {text}")
         #print(f"Sentiment: {sentiment.score}")
 
