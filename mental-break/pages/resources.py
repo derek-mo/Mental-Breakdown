@@ -3,23 +3,31 @@ import streamlit as st
 from streamlit_card import card
 
 # Resources Page
-st.title(" :exclamation: :mending_heart: HealthyHub :mending_heart: :exclamation:")
+st.title(" :exclamation: :adhesive_bandage: :heart: HealthyHub :heart: :adhesive_bandage: :exclamation:")
 st.write("### Mental Health in the Asian Community")
-st.write("In the Asian community, mental health is a topic that is often overlooked and"
-         " ignored. Let's break down some of the obstacles in the community below!")
+st.write("###### In the Asian community, mental health is a topic that is often overlooked and"
+         " ignored. In fact, Asians are 60% less likely to receive treatment for mental health issues.")
+st.write("Let's *break down* some of the obstacles in the community below!")
 
 culture_expand = st.expander("Cultural Background and Stigmas")
 culture_expand.write("- In a lot of Asian families, there is a fear of being outcast, with family reputation and community expectations on the line.")
-culture_expand.write("- Creates a false perception of the Asian American identity as a monolith")
+culture_expand.write("- Culturally, there are a lot of traditional beliefs that mental health is taboo that"
+                     " is caused by lack of harmony or evil spirits.")
+culture_expand.write("- There is importance placed on the family unit, which are disrupted by mental health problems.")
+culture_expand.write("- A difference in upbringing by the older and younger generations create a disparity in their understanding of mental health.")
 
 mmm_expand = st.expander("The Model Minority Myth")
 mmm_expand.write("- The Model Minority Myth pressures Asians and Asian Americans to succeed, often at the cost of their mental well-being.")
-mmm_expand.write("- Creates a false perception of the Asian American identity as a monolith")
+mmm_expand.write("- Perception that the Model Minority is a positive stereotype, when it is actually damaging.")
+mmm_expand.write("- Creates a false perception of the Asian American identity as a monolith. There are many different Asian cultures, and"
+                 " placing everyone in one bucket is misleading, every background has different experiences.")
 
 
 res_expand = st.expander("Underutilizing Services")
 res_expand.write("- There is a large language barrier for mental health services. 32.6% of AAPI Americans are not fluent in English.")
-res_expand.write("- Lack of Asian therapists")
+res_expand.write("- The lack of Asian therapists and service providers make existing resources less appealing and harder to access.")
+res_expand.write("- Financial strain can be a deterrant from accessing resources, and many Asians prefer informal solutions"
+                 " to their mental health issues rather than seeking professional help.")
 
 
 st.divider()
@@ -114,5 +122,7 @@ st.divider()
 
 
 source_expand = st.expander("Sources and References")
-source_expand.write("[1] insert link")
-source_expand.write("[2] insert link")
+source_expand.write("[1] https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1071736/ ")
+source_expand.write("[2] https://www.nami.org/Your-Journey/Identity-and-Cultural-Dimensions/Asian-American-and-Pacific-Islander#:~:text=AAPIs%20have%20the%20lowest%20help,health%20care%20and%20quality%20treatment ")
+source_expand.write("[3] https://ph.ucla.edu/news/news-item/2021/may/confronting-mental-health-barriers-asian-american-and-pacific-islander   ")
+source_expand.write("[4] https://www.thechicagoschool.edu/insight/from-the-magazine/the-model-minority-myth/")
