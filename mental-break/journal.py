@@ -5,6 +5,7 @@ import pandas as pd
 from google.cloud import language_v1
 from streamlit_extras.chart_container import chart_container
 from streamlit_extras.tags import tagger_component
+from streamlit_extras.switch_page_button import switch_page
 from pymongo import MongoClient
 
 def show(name, curr_user):
@@ -78,13 +79,13 @@ def show(name, curr_user):
                     new_entry.color = "bluegreen"
                 elif new_entry.score > -0.2:
                     new_entry.rank = "Neutral"
-                    new_entry.color = "orange"
+                    new_entry.color = "yellow"
                 elif new_entry.score > -0.6:
                     new_entry.rank = "Bad"
-                    new_entry.color = "red"
+                    new_entry.color = "orange"
                 else:
                     new_entry.rank = "Awful"
-                    new_entry.color = "yellow"
+                    new_entry.color = "red"
 
                 # Get the current time
                 time = datetime.datetime.now()
@@ -107,11 +108,16 @@ def show(name, curr_user):
             with st.expander("**" + entry["title"] + "**"):
                 st.write("*" + entry["time"] + "*")
                 st.write(entry["content"])
+
                 if (entry["rank"] == "Great"):
                     st.image("./assets/happyhappyhappycat.gif")
                     music_file = open('./assets/happy.mp3', 'rb')
                     music = music_file.read()
                     st.audio(music)
+                elif entry["rank"] == "Awful" or entry["rank"] == "Bad":
+                    requires_resources = st.button("See Resources", key = "resource" + str(i))
+                    if requires_resources:
+                        switch_page("resources")
 
                 col1, col2 = st.columns([1, 5])
                 with col1:
@@ -119,7 +125,8 @@ def show(name, curr_user):
                         collection.delete_one(entry)
                         st.rerun()
                 with col2:
-                    tagger_component("Day: ", [entry["rank"]], color_name=[entry["color"]])
+                    tagger_component("", ["Day: " + entry["rank"]], color_name=[entry["color"]])
+                    
 
     # Contains the code for the "Analysis" tab
     with tab3:
