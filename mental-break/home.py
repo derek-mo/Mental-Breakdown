@@ -1,5 +1,6 @@
 # Importing the Streamlit library
 import streamlit as st
+from google.cloud import language_v1
 import streamlit_authenticator as stauth
 
 from pymongo.mongo_client import MongoClient
