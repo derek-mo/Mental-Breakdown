@@ -1,5 +1,6 @@
 import streamlit as st
 import streamlit_authenticator as stauth
+import journal
 
 import yaml
 from yaml.loader import SafeLoader
@@ -7,7 +8,8 @@ from yaml.loader import SafeLoader
 
 # Page configurations
 st.set_page_config(
-    page_title="Home"
+    page_title="Mental Breakdown",
+    page_icon="📘",
 )
 
 # Login
@@ -23,15 +25,15 @@ def login():
         config['preauthorized']
     )
 
-    name, authentication_status, username = authenticator.login('Login', 'main')
-    print(name, authentication_status, username)
+    firstname, authentication_status, username = authenticator.login('Login', 'main')
+    print(firstname, authentication_status, username)
 
     if authentication_status == False:
         st.error("Username/passwords is incorrect")
     elif authentication_status == None:
         st.warning("Please enter your username and password")
     else:
-        st.warning("Yay")
+        journal.show(firstname, username)
 
 # Home
 def home():
