@@ -32,8 +32,8 @@ def login():
         st.error("Username/passwords is incorrect")
     elif authentication_status == None:
         st.warning("Please enter your username and password")
-    #else:
-        #journal.show(firstname, username)
+    else:
+        journal.show(firstname, username)
 
 # Home
 def home():
