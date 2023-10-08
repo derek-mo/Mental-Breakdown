@@ -16,6 +16,8 @@ def show(name, username):
         title = ""
         content = ""
         score = 0
+        rank = ""
+        color = ""
 
         def __init__(self, title, content, score):
             self.title = title
@@ -65,7 +67,26 @@ def show(name, username):
                     st.error("Invalid content")
                 else:
                     st.session_state["entries"].append(Entry(title, content, calcScore(content)))
+                    recent_entry = st.session_state["entries"][len(st.session_state["entries"]) - 1]
+
+                    if recent_entry.score > 0.7:
+                        recent_entry.rank = "Great"
+                        recent_entry.color = "green"
+                    elif recent_entry.score > 0.4:
+                        recent_entry.rank = "Okay"
+                        recent_entry.color = "lightgreen"
+                    elif recent_entry.score >= 0:
+                        recent_entry.rank = "Mid"
+                        recent_entry.color = "yellow"
+                    elif recent_entry.score < -0.7:
+                        recent_entry.rank = "Awful"
+                        recent_entry.color = "red"
+                    elif recent_entry.score < -0.4:
+                        recent_entry.rank = "Bad"
+                        recent_entry.color = "orange"
+
                     st.success("Saved new entry.")
+                    st.success(recent_entry.score)
                     
 
     # contains the code for the "History" tab
@@ -75,7 +96,7 @@ def show(name, username):
         for i in range(len(st.session_state["entries"]) - 1, -1, -1):
             entry = st.session_state["entries"][i]
             with st.expander("**" + entry.title + "**"):
-                tagger_component("**" + entry.title + "**", [""], color_name=["green"])
+                tagger_component("Day: ", [entry.rank], color_name=[entry.color])
                 st.write(entry.content)
                 col1, col2, NULL = st.columns([1, 1, 3])
                 with col1:
