@@ -53,9 +53,11 @@ def show(name, curr_user):
     # Contains the code for the "New" tab
     with tab1:
         st.write("### New Entry")
+
         # Create text boxes for the entry
         title = st.text_input("Write a title.")
         content = st.text_area("Write the content.")
+
         # Checks if the submitted entry is valid
         if (st.button("Submit")):
             if (len(title) == 0 and len(content) == 0):
@@ -68,21 +70,21 @@ def show(name, curr_user):
                 # Create new instance of entry object
                 new_entry = Entry(curr_user, title, content, calcScore(content))
 
-                if new_entry.score > 0.7:
+                if new_entry.score > 0.6:
                     new_entry.rank = "Great"
                     new_entry.color = "green"
-                elif new_entry.score > 0.4:
+                elif new_entry.score > 0.2:
                     new_entry.rank = "Okay"
                     new_entry.color = "bluegreen"
-                elif new_entry.score >= 0:
-                    new_entry.rank = "Mid"
-                    new_entry.color = "yellow"
-                elif new_entry.score < -0.7:
-                    new_entry.rank = "Awful"
-                    new_entry.color = "red"
-                elif new_entry.score < -0.4:
-                    new_entry.rank = "Bad"
+                elif new_entry.score > -0.2:
+                    new_entry.rank = "Neutral"
                     new_entry.color = "orange"
+                elif new_entry.score > -0.6:
+                    new_entry.rank = "Bad"
+                    new_entry.color = "red"
+                else:
+                    new_entry.rank = "Awful"
+                    new_entry.color = "yellow"
 
                 # Get the current time
                 time = datetime.datetime.now()
@@ -92,6 +94,7 @@ def show(name, curr_user):
                 # Insert the new entry
                 collection.insert_one(vars(new_entry))
                 st.success("Saved new entry.")
+                
 
     # Contains the code for the "History" tab
     with tab2:
@@ -101,21 +104,19 @@ def show(name, curr_user):
         entries = collection.find({"username": curr_user})
 
         for i, entry in enumerate(entries):
-            with st.expander("**" + entry["title"] + "** " + entry["time"]):
-                tagger_component("Day: ", [entry["rank"]], color_name=[entry["color"]])
+            with st.expander("**" + entry["title"] + "**"):
+                st.write("*" + entry["time"] + "*")
                 st.write(entry["content"])
 
-                col1, col2 = st.columns(2)
+                col1, col2 = st.columns([1, 5])
                 with col1:
                     if st.button("Delete", key = "delete" + str(i)):
                         collection.delete_one(entry)
                         st.rerun()
-                
-                # with col2:
-                #    st.button("Modify", key = "modify" + str(i))
-                #    TODO: Modify Button Functionality
+                with col2:
+                    tagger_component("Day: ", [entry["rank"]], color_name=[entry["color"]])
 
-    # COntains the code for the "Analysis" tab
+    # Contains the code for the "Analysis" tab
     with tab3:
         st.write("### Analysis")
 
