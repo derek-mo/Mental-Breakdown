@@ -25,15 +25,16 @@ def login():
         config['preauthorized']
     )
 
-    firstname, authentication_status, username = authenticator.login('Login', 'main')
-    print(firstname, authentication_status, username)
+    name, authentication_status, username = authenticator.login('Login', 'main')
+    print(name, authentication_status, username)
 
     if authentication_status == False:
         st.error("Username/passwords is incorrect")
     elif authentication_status == None:
         st.warning("Please enter your username and password")
     else:
-        journal.show(firstname, username)
+        authenticator.logout('Logout', 'sidebar')
+        journal.show(name, username)
 
 # Home
 def home():

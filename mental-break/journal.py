@@ -1,19 +1,24 @@
 import streamlit as st
 from google.cloud import language_v1
 
-# configure the page
-# st.set_page_config(
-#     page_title="Journal",
-#     page_icon="📘",
-# )
+from pymongo import MongoClient
+import certifi
 
-def show(name, username):
+
+def show(name, curr_user):
+    # Establish MongoDB connection
+    client = MongoClient('mongodb+srv://jareuhmee:mental@cluster0.d5dlehi.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp', tlsCAFile=certifi.where())
+    db = client['mental_breakdown']
+    collection = db['entries']
+
     # contains all data for an entry
     class Entry:
+        username = ""
         title = ""
         content = ""
 
-        def __init__(self, title, content):
+        def __init__(self, username, title, content):
+            self.username = username
             self.title = title
             self.content = content
 
@@ -42,10 +47,6 @@ def show(name, username):
     st.write(f"## Welcome {name} to Your Journal! 👋")
     tab1, tab2 = st.tabs(["New", "History"])
 
-    # creates a list of entries in session state if it doesn't exist
-    if ("entries" not in st.session_state):
-        st.session_state["entries"] = []
-
     # contains the code for the "New" tab
     with tab1:
         st.write("### New Entry")
@@ -61,23 +62,29 @@ def show(name, username):
             elif (len(content) == 0):
                 st.error("Invalid content")
             else:
-                st.session_state["entries"].append(Entry(title, content))
+                # insert into db
+                new_entry = Entry(curr_user, title, content)
+                collection.insert_one(vars(new_entry))
+
                 st.success("Saved new entry.")
-                st.success(analyze(st.session_state["entries"][0]))
+                #st.success(analyze(st.session_state["entries"][0])) # NLP
 
     # contains the code for the "History" tab
     with tab2:
         st.write("### History")
-        # writes the data from the entries
-        for i in range(len(st.session_state["entries"]) - 1, -1, -1):
-            entry = st.session_state["entries"][i]
-            with st.expander("**" + entry.title + "**"):
-                st.write(entry.content)
+
+        # Writes the data from the entries
+        entries = collection.find({"username": curr_user})
+
+        for i, entry in enumerate(entries):
+            with st.expander("**" + entry["title"] + "**"):
+                st.write(entry["content"])
+
                 col1, col2, NULL = st.columns([1, 1, 3])
                 with col1:
                     st.button("Modify", key = "modify" + str(i))
                     # TODO: Modify Button Functionality
-                    st.button("Delete", key = "delete" + str(i))
-                    # TODO: Delete Button Functionality
-            
-    # st.session_state 
+
+                    if st.button("Delete", key = "delete" + str(i)):
+                        collection.delete_one(entry)
+                        st.rerun()
