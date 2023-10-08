@@ -20,7 +20,6 @@ class Entry:
         self.content = content
         self.score = score
 
-
 def calcScore(content : str):
     # ======== GOOGLE CLOUD NLP ========
     # Instantiates a client
@@ -37,6 +36,8 @@ def calcScore(content : str):
         request={"document": document}
     ).document_sentiment
 
+    sentiment.score = round(sentiment.score, 2)
+
     if sentiment.score > 0.7:
         print("Extremely Positive")
     elif sentiment.score > 0.4:
@@ -46,11 +47,10 @@ def calcScore(content : str):
     print(f"Text: {text}")
     print(f"Sentiment: {sentiment.score}")
 
-    return sentiment.score
-
+    return round(sentiment.score, 2)
 
 st.write("# Welcome to Your Journal! 👋")
-tab1, tab2 = st.tabs(["New", "History"])
+tab1, tab2, tab3 = st.tabs(["New", "History", "Analysis"])
 
 # creates a list of entries in session state if it doesn't exist
 if ("entries" not in st.session_state):
@@ -73,9 +73,9 @@ with tab1:
             elif(len(content) == 0):
                 st.error("Invalid content")
             else:
-                entries.append(Entry(title, content, calcScore(content)))
+                st.session_state["entries"].append(Entry(title, content, calcScore(content)))
                 st.success("Saved new entry.")
-                st.success(entries[0].score)
+                st.success(st.session_state["entries"][len(st.session_state["entries"])- 1].score)
                 
 
 # contains the code for the "History" tab
@@ -92,5 +92,18 @@ with tab2:
                 # TODO: Modify Button Functionality
                 st.button("Delete", key = "delete" + str(i))
                 # TODO: Delete Button Functionality
+
+with tab3:
+    st.write("### Analysis")
+
+    chart_data = _get_random_data()
+
+    for i in st.session_state["entries"]:
+        chart_data.append = i[0].score
+
+
+    with chart_container(chart_data):
+        st.write("Here's a cool chart")
+        st.area_chart(chart_data)
         
 # st.session_state 
