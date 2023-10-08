@@ -47,7 +47,7 @@ def show(name, curr_user):
 
         return round(sentiment.score, 2)
 
-    st.write("# Welcome to Your Journal! 👋")
+    st.write(f"## Welcome {name} to Your Journal! 👋")
     tab1, tab2, tab3 = st.tabs(["New", "History", "Analysis"])
 
     # contains the code for the "New" tab
@@ -67,7 +67,6 @@ def show(name, curr_user):
             else:
                 # insert into db
                 new_entry = Entry(curr_user, title, content, calcScore(content))
-                collection.insert_one(vars(new_entry))
 
                 if new_entry.score > 0.7:
                     new_entry.rank = "Great"
@@ -85,6 +84,8 @@ def show(name, curr_user):
                     new_entry.rank = "Bad"
                     new_entry.color = "orange"
 
+                collection.insert_one(vars(new_entry))
+
                 st.success("Saved new entry.")
                 #st.success(analyze(st.session_state["entries"][0])) # NLP
 
@@ -97,7 +98,7 @@ def show(name, curr_user):
 
         for i, entry in enumerate(entries):
             with st.expander("**" + entry["title"] + "**"):
-                tagger_component("Day: ", [entry.rank], color_name=[entry.color])
+                tagger_component("Day: ", [entry["rank"]], color_name=[entry["color"]])
                 st.write(entry["content"])
 
                 col1, col2, NULL = st.columns([1, 1, 3])
@@ -114,8 +115,9 @@ def show(name, curr_user):
 
         data = {"Column 1": []}
 
+        entries = collection.find({"username": curr_user})
         for i, entry in enumerate(entries):
-            data["Column 1"].append(entry.score)
+            data["Column 1"].append(entry["score"])
 
         chart_data = pd.DataFrame(data)
 
