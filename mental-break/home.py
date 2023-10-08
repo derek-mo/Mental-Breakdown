@@ -1,18 +1,45 @@
-# Importing the Streamlit library
 import streamlit as st
-from google.cloud import language_v1
+import streamlit_authenticator as stauth
+import journal
 
-# Streamlit app title
-st.title('Personalized Greeting App')
+import yaml
+from yaml.loader import SafeLoader
 
-# User input for name
-name = st.text_input('What is your name?')
 
-# Displaying personalized greeting
-if name:
-    st.write(f'Hello, {name}! Welcome to the Streamlit app.')
-else:
-    st.write('Enter your name above.')
+# Page configurations
+st.set_page_config(
+    page_title="Mental Breakdown",
+    page_icon="📘",
+)
 
-# Adding an image to the app
-st.image('./assets/happyhappyhappycat.gif', caption='HAPPYHAPPYHAPPY', use_column_width=True)
+# Login
+def login():
+    with open('./config.yaml') as file:
+        config = yaml.load(file, Loader=SafeLoader)
+
+    authenticator = stauth.Authenticate(
+        config['credentials'],
+        config['cookie']['name'],
+        config['cookie']['key'],
+        config['cookie']['expiry_days'],
+        config['preauthorized']
+    )
+
+    firstname, authentication_status, username = authenticator.login('Login', 'main')
+    print(firstname, authentication_status, username)
+
+    if authentication_status == False:
+        st.error("Username/passwords is incorrect")
+    elif authentication_status == None:
+        st.warning("Please enter your username and password")
+    else:
+        journal.show(firstname, username)
+
+# Home
+def home():
+    st.title("Mental Breakdown")
+    st.write("A journaling web application that analyzes your daily journal entries and provides feedback on ways to improve the next day.")
+    login()
+
+# Main
+home()

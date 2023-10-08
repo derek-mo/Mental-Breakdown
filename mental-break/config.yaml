@@ -1,0 +1,25 @@
+credentials:
+  usernames:
+    dmo:
+      email: derek.mo@ufl.edu
+      name: Derek
+      password: $2b$12$F303l.acQRautqfjsY2BaOAzKyC.VeVwhzfVzVAY6k3d3Fb7Gkhg2
+    jgarcia:
+      email: jeremygarcia@ufl.edu
+      name: Jeremy
+      password: $2b$12$2feK/KHd5/L2ERa.b8gZue5ypJWD8XxvhYSgEzt0HfvjNEzvAwieC
+    lsy:
+      email: sy.liam@ufl.edu
+      name: Liam
+      password: $2b$12$R.0WUSChfpp/C4ph/lPPquIFTlLB.aD9R.XvIfolgQcJVDvQYFhwa
+    skhondaker:
+      email: s.khondaker@ufl.edu
+      name: Sharika
+      password: $2b$12$McqJETPUIS.y8jYHgmgwOeB3Yi0ifgjhv0Jq8MmzbsWfOSMH0cJgu
+cookie:
+  expiry_days: 0
+  key: some_signature_key
+  name: some_cookie_name
+preauthorized:
+  emails:
+  - test@gmail.com
