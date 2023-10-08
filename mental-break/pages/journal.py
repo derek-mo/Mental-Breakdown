@@ -51,7 +51,10 @@ def calcScore(content : str):
 
 st.write("# Welcome to Your Journal! 👋")
 tab1, tab2 = st.tabs(["New", "History"])
-entries = []
+
+# creates a list of entries in session state if it doesn't exist
+if ("entries" not in st.session_state):
+    st.session_state["entries"] = []
 
 # contains the code for the "New" tab
 with tab1:
@@ -79,6 +82,15 @@ with tab1:
 with tab2:
     st.write("### History")
     # writes the data from the entries
-    for entry in entries:
-        st.write(entry.title)
-        st.write(entry.content)
+    for i in range(len(st.session_state["entries"]) - 1, -1, -1):
+        entry = st.session_state["entries"][i]
+        with st.expander("**" + entry.title + "**"):
+            st.write(entry.content)
+            col1, col2, NULL = st.columns([1, 1, 3])
+            with col1:
+                st.button("Modify", key = "modify" + str(i))
+                # TODO: Modify Button Functionality
+                st.button("Delete", key = "delete" + str(i))
+                # TODO: Delete Button Functionality
+        
+# st.session_state 
