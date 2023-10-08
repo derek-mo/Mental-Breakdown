@@ -3,11 +3,20 @@ import streamlit as st
 from streamlit_card import card
 from streamlit_extras.app_logo import add_logo
 
+# Set the page configuration
+st.set_page_config(
+    page_title=" HealthyHub",
+    page_icon=":heart:",
+)
+
 # Add the page logo
 add_logo("./assets/logo.png", 180)
 
 # Resources Page
 st.title(" :exclamation: :adhesive_bandage: :heart: HealthyHub :heart: :adhesive_bandage: :exclamation:")
+
+
+
 st.write("### Mental Health in the Asian Community")
 st.write("###### In the Asian community, mental health is a topic that is often overlooked and"
          " ignored. In fact, Asians are 60% less likely to receive treatment for mental health issues.")
