@@ -40,7 +40,7 @@ def login():
 # Home
 def home():
     st.title("📖 Mental Breakdown 📖")
-    st.write("A journaling web application that analyzes your daily journal entries and provides feedback on ways to improve the next day.")
+    st.write("A journaling web application that analyzes your daily journal entries to improve the next day.")
     login()
 
 # Main
