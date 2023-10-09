@@ -13,6 +13,7 @@ def show(name, curr_user):
     client = MongoClient('mongodb+srv://jareuhmee:mental@cluster0.d5dlehi.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp', tlsCAFile=certifi.where())
     db = client['mental_breakdown']
     collection = db['entries']
+    streaks = db['streaks']
 
     # Contains all data for an entry
     class Entry:
@@ -89,17 +90,51 @@ def show(name, curr_user):
 
                 # Get the current time
                 time = datetime.datetime.now()
-                time = time.strftime("%B %d, %Y %I:%M %p")
-                new_entry.time = time
+                time_str = time.strftime("%B %d, %Y %I:%M %p")
+                new_entry.time = time_str
 
                 # Insert the new entry
                 collection.insert_one(vars(new_entry))
                 st.success("Saved new entry.")
+
+                # Update user streak
+                existing_user = streaks.find_one({"username": curr_user})
+
+                if existing_user:
+                    prev_time = existing_user["time"]
+                    prev_streak = existing_user["streak"]
+
+                    # Same day
+                    if ((time - prev_time).days > 1):
+                        streaks.update_one({"username": curr_user}, {"$set": {"streak": 1}})
+                    elif ((time - prev_time).days == 1):
+                        streaks.update_one({"username": curr_user}, {"$set": {"streak": prev_streak + 1}})
+
+                    streaks.update_one({"username": curr_user}, {"$set": {"time": time}})
+                else:
+                    new_attributes = {
+                        "username": curr_user,
+                        "streak": 1,
+                        "time": time
+                    }
+                    streaks.insert_one(new_attributes)
+
                 
 
     # Contains the code for the "History" tab
     with tab2:
         st.write("### History")
+
+        top1, top2 = st.columns([1, 4])
+        with top1:
+            if collection.find({"username": curr_user}):
+                entry_count = collection.count_documents({"username": curr_user})
+                tagger_component("", ["Entry Count: " + str(entry_count)], color_name=["blue"])
+        with top2:
+            if streaks.find_one({"username": curr_user}):
+                curr_streak = streaks.find_one({"username": curr_user})["streak"]
+                tagger_component("", ["Daily Streak: " + str(curr_streak)], color_name=["violet"])
+
 
         # Writes the data from the entries
         entries = collection.find({"username": curr_user})
