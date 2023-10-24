@@ -3,7 +3,7 @@ A journaling web application that analyzes the users daily journal entries and p
 
 
 ## Introduction
-
+Check out our Devpost! https://devpost.com/software/mental-breakdown
 
 ## Getting Started
 **Step 1:** Clone the repository
